@@ -1,0 +1,47 @@
+[
+  {
+    "id": "TC001",
+    "title": "health check api status and uptime",
+    "description": "Verify that the /api/health endpoint returns a 200 status with a JSON response containing status as 'ok', a valid timestamp, and uptime as a number."
+  },
+  {
+    "id": "TC002",
+    "title": "catalogue generate api image upload and job creation",
+    "description": "Test the /api/catalogue/generate POST endpoint to ensure it accepts valid image files (JPEG, PNG, WEBP, HEIC), initiates a generation job, and returns a 202 status with a jobId, status, message, and estimatedTime."
+  },
+  {
+    "id": "TC003",
+    "title": "catalogue job status retrieval",
+    "description": "Verify the /api/catalogue/status/{jobId} GET endpoint returns the correct job status, progress, and generated items for a valid jobId, and returns 404 for invalid jobId."
+  },
+  {
+    "id": "TC004",
+    "title": "catalogue item download",
+    "description": "Test the /api/catalogue/download/{itemId} GET endpoint to ensure it returns the requested catalogue item as an octet-stream with a 200 status, and returns 404 if the item does not exist."
+  },
+  {
+    "id": "TC005",
+    "title": "user catalogue jobs list pagination",
+    "description": "Verify the /api/catalogue/jobs/{userId} GET endpoint returns a paginated list of catalogue generation jobs for the specified userId, supports page and limit query parameters, and returns 200 status."
+  },
+  {
+    "id": "TC006",
+    "title": "catalogue job cancellation",
+    "description": "Test the /api/catalogue/jobs/{jobId} DELETE endpoint to ensure it cancels a processing job successfully with a 200 status, and returns 404 if the jobId does not exist."
+  },
+  {
+    "id": "TC007",
+    "title": "trend analyzer get trend data with filters",
+    "description": "Verify the /api/trends GET endpoint returns trend data filtered by optional query parameters ageGroup, season, category, and timeRange, with a 200 status and correct data structure."
+  },
+  {
+    "id": "TC008",
+    "title": "trend analyzer get detailed trend information",
+    "description": "Test the /api/trends/{trendId} GET endpoint to ensure it returns detailed information for a valid trendId with a 200 status, and returns 404 for invalid trendId."
+  },
+  {
+    "id": "TC009",
+    "title": "trend categories list retrieval",
+    "description": "Verify the /api/trends/categories/list GET endpoint returns a 200 status with a JSON array of available dress categories."
+  }
+]

@@ -27,8 +27,9 @@ A comprehensive B2B SaaS application for fashion retailers and bulk buyers to ge
 - Redis for caching
 
 ### External Integrations
-- Runway ML API for video generation (mock implementation included)
-- Google Trends API for trend data (mock implementation included)
+- **Replicate API** for image and video generation (free tier available, recommended)
+- Runway ML API for video generation (alternative, mock implementation included)
+- Enhanced mock trend data with realistic patterns and seasonal variations
 
 ## Project Structure
 

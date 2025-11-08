@@ -188,7 +188,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=fashion_saas
 DB_USER=postgres
-DB_PASSWORD=your_postgres_password_here
+DB_PASSWORD=fashiondev
 
 # Redis Configuration (Optional)
 REDIS_HOST=localhost
@@ -196,8 +196,15 @@ REDIS_PORT=6379
 REDIS_PASSWORD=
 
 # API Keys (Optional - app works in mock mode without these)
+# Replicate API (Free tier available) - Recommended for image and video generation
+# Get your API token from: https://replicate.com/account/api-tokens
+REPLICATE_API_TOKEN=
+
+# Runway ML API (Alternative to Replicate)
 RUNWAY_ML_API_KEY=
 RUNWAY_ML_API_URL=https://api.runwayml.com/v1
+
+# Trends API (Optional - uses enhanced mock data if not provided)
 TRENDS_API_KEY=
 TRENDS_API_URL=https://trends.googleapis.com/v1beta
 

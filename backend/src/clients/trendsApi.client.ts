@@ -85,14 +85,45 @@ class TrendsApiClient {
     }
   }
 
-  // Mock implementations for development/testing
+  // Enhanced mock implementations with realistic data patterns
   private mockFetchTrendData(filters: TrendFilters): TrendData {
     const now = new Date()
-    const categories = ['Maxi Dress', 'Mini Dress', 'Casual Dress', 'Formal Dress', 'Party Dress']
+    const categories = ['Maxi Dress', 'Mini Dress', 'Casual Dress', 'Formal Dress', 'Party Dress', 'Wedding Dress', 'Cocktail Dress', 'Evening Dress']
     
-    // Generate time series data
+    // Get current season
+    const currentMonth = now.getMonth()
+    const currentSeason = currentMonth >= 2 && currentMonth <= 4 ? 'spring' :
+                          currentMonth >= 5 && currentMonth <= 7 ? 'summer' :
+                          currentMonth >= 8 && currentMonth <= 10 ? 'fall' : 'winter'
+    
+    // Use filter season or current season
+    const season = filters.season || currentSeason
+    
+    // Generate realistic time series data with trends
     const timeSeriesData = []
     const days = filters.timeRange === '30days' ? 30 : filters.timeRange === '90days' ? 90 : 365
+    
+    // Base volumes for each category (realistic search volumes)
+    const baseVolumes: Record<string, number> = {
+      'Maxi Dress': 8500,
+      'Mini Dress': 7200,
+      'Casual Dress': 6800,
+      'Formal Dress': 5400,
+      'Party Dress': 4900,
+      'Wedding Dress': 3800,
+      'Cocktail Dress': 4200,
+      'Evening Dress': 3600,
+    }
+    
+    // Seasonal multipliers
+    const seasonalMultipliers: Record<string, Record<string, number>> = {
+      spring: { 'Maxi Dress': 1.1, 'Mini Dress': 0.9, 'Casual Dress': 1.2, 'Formal Dress': 0.95 },
+      summer: { 'Maxi Dress': 1.3, 'Mini Dress': 1.4, 'Casual Dress': 1.3, 'Formal Dress': 0.8 },
+      fall: { 'Maxi Dress': 1.0, 'Mini Dress': 0.7, 'Casual Dress': 1.1, 'Formal Dress': 1.1 },
+      winter: { 'Maxi Dress': 1.2, 'Mini Dress': 0.5, 'Casual Dress': 1.0, 'Formal Dress': 1.3 },
+    }
+    
+    const multipliers = seasonalMultipliers[season] || {}
     
     for (let i = days - 1; i >= 0; i--) {
       const date = new Date(now)
@@ -102,76 +133,128 @@ class TrendsApiClient {
         date: date.toISOString().split('T')[0],
       }
       
+      // Add realistic variation with weekly patterns (higher on weekends)
+      const dayOfWeek = date.getDay()
+      const weekendMultiplier = (dayOfWeek === 0 || dayOfWeek === 6) ? 1.15 : 1.0
+      
       categories.forEach(cat => {
-        point[cat] = Math.floor(Math.random() * 100) + 50
+        const base = baseVolumes[cat] || 5000
+        const seasonalMult = multipliers[cat] || 1.0
+        const trend = 1 + (Math.sin(i / 7) * 0.1) // Weekly trend
+        const random = 0.9 + Math.random() * 0.2 // Random variation
+        
+        point[cat] = Math.floor(base * seasonalMult * trend * random * weekendMultiplier)
       })
       
       timeSeriesData.push(point)
     }
 
-    // Age demographics
+    // Age demographics with realistic distribution
     const ageDemographics = [
-      { name: '18-25', value: filters.ageGroup === '18-25' ? 45 : 30 },
-      { name: '26-35', value: filters.ageGroup === '26-35' ? 45 : 35 },
-      { name: '36-50', value: filters.ageGroup === '36-50' ? 45 : 25 },
-      { name: '50+', value: filters.ageGroup === '50+' ? 45 : 10 },
+      { 
+        name: '18-25', 
+        value: filters.ageGroup === '18-25' ? 45 : 
+               filters.ageGroup ? 15 : 
+               Math.floor(30 + Math.random() * 10) 
+      },
+      { 
+        name: '26-35', 
+        value: filters.ageGroup === '26-35' ? 45 : 
+               filters.ageGroup ? 15 : 
+               Math.floor(35 + Math.random() * 10) 
+      },
+      { 
+        name: '36-50', 
+        value: filters.ageGroup === '36-50' ? 45 : 
+               filters.ageGroup ? 15 : 
+               Math.floor(25 + Math.random() * 10) 
+      },
+      { 
+        name: '50+', 
+        value: filters.ageGroup === '50+' ? 45 : 
+               filters.ageGroup ? 15 : 
+               Math.floor(10 + Math.random() * 5) 
+      },
     ]
 
-    // Trending types
-    const trendingTypes = [
-      { name: 'Maxi Dress', searchVolume: 8500 },
-      { name: 'Mini Dress', searchVolume: 7200 },
-      { name: 'Casual Dress', searchVolume: 6800 },
-      { name: 'Formal Dress', searchVolume: 5400 },
-      { name: 'Party Dress', searchVolume: 4900 },
-      { name: 'Wedding Dress', searchVolume: 3800 },
-    ]
+    // Normalize to 100%
+    const total = ageDemographics.reduce((sum, d) => sum + d.value, 0)
+    ageDemographics.forEach(d => d.value = Math.round((d.value / total) * 100))
 
-    // Seasonal trends
+    // Trending types with realistic search volumes
+    const trendingTypes = categories.map(cat => {
+      const base = baseVolumes[cat] || 5000
+      const seasonalMult = multipliers[cat] || 1.0
+      return {
+        name: cat,
+        searchVolume: Math.floor(base * seasonalMult * (0.9 + Math.random() * 0.2))
+      }
+    }).sort((a, b) => b.searchVolume - a.searchVolume)
+
+    // Seasonal trends with realistic data
     const seasonalTrends = [
       {
         season: 'Spring',
-        'Maxi Dress': 7500,
-        'Mini Dress': 6500,
-        'Casual Dress': 8000,
+        'Maxi Dress': Math.floor(baseVolumes['Maxi Dress'] * 1.1),
+        'Mini Dress': Math.floor(baseVolumes['Mini Dress'] * 0.9),
+        'Casual Dress': Math.floor(baseVolumes['Casual Dress'] * 1.2),
+        'Formal Dress': Math.floor(baseVolumes['Formal Dress'] * 0.95),
+        'Party Dress': Math.floor(baseVolumes['Party Dress'] * 1.0),
       },
       {
         season: 'Summer',
-        'Maxi Dress': 9500,
-        'Mini Dress': 9200,
-        'Casual Dress': 8800,
+        'Maxi Dress': Math.floor(baseVolumes['Maxi Dress'] * 1.3),
+        'Mini Dress': Math.floor(baseVolumes['Mini Dress'] * 1.4),
+        'Casual Dress': Math.floor(baseVolumes['Casual Dress'] * 1.3),
+        'Formal Dress': Math.floor(baseVolumes['Formal Dress'] * 0.8),
+        'Party Dress': Math.floor(baseVolumes['Party Dress'] * 1.2),
       },
       {
         season: 'Fall',
-        'Maxi Dress': 7800,
-        'Mini Dress': 5500,
-        'Casual Dress': 7200,
+        'Maxi Dress': Math.floor(baseVolumes['Maxi Dress'] * 1.0),
+        'Mini Dress': Math.floor(baseVolumes['Mini Dress'] * 0.7),
+        'Casual Dress': Math.floor(baseVolumes['Casual Dress'] * 1.1),
+        'Formal Dress': Math.floor(baseVolumes['Formal Dress'] * 1.1),
+        'Party Dress': Math.floor(baseVolumes['Party Dress'] * 0.9),
       },
       {
         season: 'Winter',
-        'Maxi Dress': 8200,
-        'Mini Dress': 4200,
-        'Casual Dress': 6900,
+        'Maxi Dress': Math.floor(baseVolumes['Maxi Dress'] * 1.2),
+        'Mini Dress': Math.floor(baseVolumes['Mini Dress'] * 0.5),
+        'Casual Dress': Math.floor(baseVolumes['Casual Dress'] * 1.0),
+        'Formal Dress': Math.floor(baseVolumes['Formal Dress'] * 1.3),
+        'Party Dress': Math.floor(baseVolumes['Party Dress'] * 1.1),
       },
     ]
 
-    // Predictive insights
+    // Top trending style based on current season
+    const topTrendingStyle = trendingTypes[0].name
+    
+    // Calculate YoY growth (realistic range)
+    const yoyGrowth = 12.5 + (Math.random() * 8) // 12.5% to 20.5%
+
+    // Predictive insights based on current trends
     const predictiveInsights = [
       {
         title: 'Rising Trend: Sustainable Materials',
-        description: 'Dresses with eco-friendly materials showing 25% increase in search volume',
-        confidence: 85,
+        description: `Dresses with eco-friendly materials showing ${Math.floor(20 + Math.random() * 10)}% increase in search volume`,
+        confidence: 80 + Math.floor(Math.random() * 15),
+      },
+      {
+        title: `Seasonal Shift: ${season.charAt(0).toUpperCase() + season.slice(1)} Trends`,
+        description: `${topTrendingStyle} showing strong growth for ${season} season with increased interest in ${filters.ageGroup || 'all demographics'}`,
+        confidence: 75 + Math.floor(Math.random() * 20),
       },
       {
         title: 'Demographic Shift: 26-35 Age Group',
         description: 'Increased interest in formal and business-casual dresses among 26-35 demographic',
-        confidence: 78,
+        confidence: 70 + Math.floor(Math.random() * 15),
       },
     ]
 
     return {
-      topTrendingStyle: 'Maxi Dress',
-      yoyGrowth: 15.5,
+      topTrendingStyle,
+      yoyGrowth: Math.round(yoyGrowth * 10) / 10,
       lastUpdated: now.toISOString(),
       trendingTypes,
       ageDemographics,

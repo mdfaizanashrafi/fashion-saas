@@ -1,0 +1,511 @@
+[
+  {
+    "id": "TC001",
+    "title": "Single Image Upload and Catalogue Generation Success",
+    "description": "Verify that a user can upload a single valid dress image and successfully generate AI model showcases with correct job creation and status updates.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to catalogue generation page"
+      },
+      {
+        "type": "action",
+        "description": "Upload a single valid image file (JPEG format)"
+      },
+      {
+        "type": "action",
+        "description": "Select required model presets and output package"
+      },
+      {
+        "type": "action",
+        "description": "Submit the generation job"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that system responds with job ID and status 'processing'"
+      },
+      {
+        "type": "action",
+        "description": "Poll job status endpoint until status is 'completed'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify generated assets include 3-5 photorealistic stills, 15-second video clip, and 30-second runway video"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify multi-angle toggles and metadata badges are displayed in output preview"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Batch Image Upload with Maximum 200 Images",
+    "description": "Validate batch upload functionality for catalogue generation with maximum 200 images and ensure correct job creation and batch processing.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to catalogue generation page"
+      },
+      {
+        "type": "action",
+        "description": "Batch upload 200 valid image files including supported formats (JPEG, PNG, WEBP, HEIC)"
+      },
+      {
+        "type": "action",
+        "description": "Select presets and output package for batch"
+      },
+      {
+        "type": "action",
+        "description": "Submit the batch generation job"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that system accepts batch and returns a job ID with status 'processing'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify progress monitoring shows incremental progress and estimated time to completion"
+      },
+      {
+        "type": "action",
+        "description": "Wait for job completion status"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all generated assets include appropriate stills, videos, and metadata previews per image"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Invalid File Format Upload Handling",
+    "description": "Ensure that upload validation rejects unsupported file formats and displays appropriate error messages.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to catalogue generation page"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to upload unsupported file formats (e.g., GIF, BMP, TXT)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify client-side validation blocks each invalid file with an error message"
+      },
+      {
+        "type": "action",
+        "description": "Submit upload with only invalid files"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that server responds with 400 Bad Request indicating invalid file format"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Resumable Upload Support",
+    "description": "Confirm that interrupted uploads can resume without data loss or corruption.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Start uploading a large image or batch upload"
+      },
+      {
+        "type": "action",
+        "description": "Interrupt the network connection or cancel upload mid-way"
+      },
+      {
+        "type": "action",
+        "description": "Resume upload process from interruption point"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify upload resumes correctly and completes successfully"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Job Queue Retry and Cancellation",
+    "description": "Validate ability to retry failed jobs and cancel processing jobs successfully.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Submit catalogue generation job with valid inputs"
+      },
+      {
+        "type": "action",
+        "description": "Simulate generation failure or cause a job to fail"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify job status updates to 'failed'"
+      },
+      {
+        "type": "action",
+        "description": "Use retry option to resubmit the failed job"
+      },
+      {
+        "type": "assertion",
+        "description": "Check job status updates to 'processing' and eventually to 'completed'"
+      },
+      {
+        "type": "action",
+        "description": "Submit a new catalogue generation job"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the job before completion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify job status changes to 'cancelled' and resources are freed"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Output Preview Metadata Editing",
+    "description": "Confirm inline editing of metadata badges on generated output previews functions correctly and saves changes.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Complete a catalogue generation job and open output preview"
+      },
+      {
+        "type": "action",
+        "description": "Toggle between multiple angles of generated assets"
+      },
+      {
+        "type": "action",
+        "description": "Edit metadata badges (market appeal score, style compatibility, body diversity)"
+      },
+      {
+        "type": "action",
+        "description": "Save edited metadata inline"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify edited metadata persists and reflects in subsequent views and exports"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Bulk Export ZIP Contents and Structure",
+    "description": "Verify bulk export generates ZIP file containing structured folders for images, videos, and metadata in CSV/JSON formats correctly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Complete one or more catalogue generation jobs with multiple assets"
+      },
+      {
+        "type": "action",
+        "description": "Perform bulk export with selected catalogue items"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate ZIP file downloads successfully"
+      },
+      {
+        "type": "assertion",
+        "description": "Extract ZIP and confirm folders are correctly named and organized (e.g., images/, videos/)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify presence and correctness of metadata files (CSV/JSON) matching exported assets"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Trend Analyzer Filters and Data Accuracy",
+    "description": "Confirm that applying filters in Trend Analyzer dashboard returns accurate trend data consistent with external sources.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Trend Analyzer dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Apply filters for age group, season, category, region, and time range"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard updates trending carousel, demographic charts, heatmaps, time-series, and YoY comparisons correctly"
+      },
+      {
+        "type": "assertion",
+        "description": "Cross-reference displayed trend data with Google Trends and social listening sources for consistency"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Predictive Insights with Confidence Scores and Actions",
+    "description": "Verify that machine learning-driven predictive insights display confidence scores and provide recommended actions clearly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access Trend Analyzer predictive insights section"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that insights include confidence scores for forecasts"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify recommendations for actions are relevant and actionable"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Watchlist Alerts via Email and Slack",
+    "description": "Test watchlist creation and alert triggering on trend velocity changes with notifications sent via email and Slack.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Pin specific trends to user watchlist"
+      },
+      {
+        "type": "action",
+        "description": "Configure alert preferences for email and Slack notifications"
+      },
+      {
+        "type": "action",
+        "description": "Simulate or wait for trend velocity changes triggering alert threshold"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user receives alert notifications correctly on email and Slack"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Role-Based Access Control Enforcement",
+    "description": "Confirm that role-based access controls restrict unauthorized users from accessing sensitive features and data consistent with GDPR/CCPA compliance.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a user without admin or proper permissions"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access admin-only APIs, job cancellation, or sensitive trend data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is denied with appropriate HTTP 403 Forbidden responses"
+      },
+      {
+        "type": "action",
+        "description": "Log in as a user with full permissions"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to all authorized resources and features"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Secure File Scanning and Audit Logging",
+    "description": "Validate that all uploaded files undergo malware scanning and that all critical operations are logged for audit purposes.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Upload a file known to trigger antivirus scanner (test/malicious pattern file)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify upload is blocked and user is notified of security scan failure"
+      },
+      {
+        "type": "action",
+        "description": "Perform catalogue generation and other critical actions"
+      },
+      {
+        "type": "assertion",
+        "description": "Check audit logs for records of uploads, job submissions, cancellations, and metadata edits with user identifiers and timestamps"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "API Rate Limiting and Caching Behavior",
+    "description": "Ensure that API endpoints enforce rate limits, return proper headers, and utilize caching for efficient repeated requests.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make multiple rapid consecutive requests to catalogue generation and trend data APIs exceeding allowed rates"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 429 Too Many Requests responses are returned appropriately with retry headers"
+      },
+      {
+        "type": "action",
+        "description": "Request repeated trend data endpoint with same filters"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify responses are served quickly from cache with matching cached data headers"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Handling Upload Failures and Generation Timeouts",
+    "description": "Test that the system gracefully handles upload failures, generation timeouts, and missing data with user-facing notifications and fallback options.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate network failure during image upload"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user receives notification of upload failure and options to retry or cancel"
+      },
+      {
+        "type": "action",
+        "description": "Simulate AI generation process hitting timeouts or server errors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify job status updates to 'failed' and user is informed with retry options"
+      },
+      {
+        "type": "action",
+        "description": "Request trend data for a non-existent or empty filter set resulting in no data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard displays appropriate 'no data' message and fallback visualizations"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Catalogue Generation API - Health and Invalid Calls",
+    "description": "Verify Catalogue Generator API /generate, /status, and /download endpoints respond correctly for valid and invalid calls including error conditions.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Call /api/catalogue/generate with valid multipart/form-data images"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 202 Accepted response with jobId and estimatedTime"
+      },
+      {
+        "type": "action",
+        "description": "Call /api/catalogue/generate with missing images or invalid payload"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 400 Bad Request response"
+      },
+      {
+        "type": "action",
+        "description": "Call /api/catalogue/status/{jobId} with valid and invalid jobId"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 200 OK with job status for valid jobId, and 404 Not Found for invalid"
+      },
+      {
+        "type": "action",
+        "description": "Call /api/catalogue/download/{itemId} with valid and invalid itemId"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 200 OK with file stream for valid itemId, and 404 Not Found for invalid"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Trend Analyzer API - Filter Validation and Data Responses",
+    "description": "Ensure Trend Analyzer API returns expected data or errors for valid and invalid filter parameters.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make GET requests to /api/trends with valid filters (ageGroup, season, category, timeRange)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 200 OK with trend data matching requested filters"
+      },
+      {
+        "type": "action",
+        "description": "Make GET requests to /api/trends with invalid or unsupported filter values"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 400 Bad Request with error messages indicating invalid filters"
+      },
+      {
+        "type": "action",
+        "description": "Request /api/trends/categories/list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 200 OK with list of categories available"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "API Health Check Endpoint Verification",
+    "description": "Verify the health check API endpoint responds correctly with current system status, timestamp, and uptime.",
+    "category": "functional",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make GET request to /api/health"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 200 OK response with JSON containing 'status' as 'ok', valid ISO8601 timestamp, and numeric uptime"
+      }
+    ]
+  }
+]
