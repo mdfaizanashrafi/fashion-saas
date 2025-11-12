@@ -1,19 +1,16 @@
 {
   "status": "commited",
-  "type": "backend",
+  "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:5000",
-  "backendAuthType": "basic token",
-  "backendUsername": "fashion_saas",
-  "backendPassword": "fashiondev",
+  "localEndpoint": "http://localhost:3000",
   "executionArgs": {
     "projectName": "fashion-saas",
     "projectPath": "D:\\Python\\fashion-saas",
     "testIds": [],
     "additionalInstruction": "",
     "envs": {
-      "API_KEY": "sk-user-QoM3T2AkTM-uUGz9I5t_h5ue50mFHMDXMsxNQZTu0YFSzZttMrZhQLES4Pw9ZuiFGswsTpj7w8eJsRW3QRR-GuxVC_2Xa8CItxK2DYZcH1-9ugigNK8KcqFBaCYhcLYuqoA"
+      "API_KEY": "sk-user-FhF0Wq4YVdnoOY4ln999HphZV5QQv0H8BVjBfi2lvEKspx4Y73Gv2AaeOYF4UXqTAMmNFMVT9kU_QGDXcZGvn99BNrExFnyhPDYvyCQo635kaJgJp51F9UFk7nc8AHCMSPQ"
     }
   },
-  "proxy": "http://0f7d50ff-905e-44da-af46-6b7127b3952d:ljELmrGEyH0UZndIkTFUenu5WT6uUhWK@tun.testsprite.com:8080"
+  "proxy": "http://9ec78da3-4f59-45de-86cb-7b1d47680be7:iQBQg6zFZrIkjnsdFX7bnHWCQQN868E1@tun.testsprite.com:8080"
 }
